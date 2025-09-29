@@ -34,6 +34,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+
+// Serve static files from frontend directory
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseAuthorization();
 app.MapControllers();
 
@@ -48,39 +53,67 @@ using (var scope = app.Services.CreateScope())
     {
         var users = new[]
         {
-            new LostAndFoundAPI.Models.User { Name = "John Doe", Email = "john@example.com", Phone = "555-0101" },
-            new LostAndFoundAPI.Models.User { Name = "Jane Smith", Email = "jane@example.com", Phone = "555-0102" },
-            new LostAndFoundAPI.Models.User { Name = "Bob Johnson", Email = "bob@example.com", Phone = "555-0103" }
+            new LostAndFoundAPI.Models.User 
+            { 
+                Id = Guid.NewGuid().ToString(),
+                Name = "John Doe", 
+                Email = "john@example.com", 
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
+                UserType = LostAndFoundAPI.Models.UserType.Student
+            },
+            new LostAndFoundAPI.Models.User 
+            { 
+                Id = Guid.NewGuid().ToString(),
+                Name = "Jane Smith", 
+                Email = "jane@example.com", 
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
+                UserType = LostAndFoundAPI.Models.UserType.Student
+            },
+            new LostAndFoundAPI.Models.User 
+            { 
+                Id = Guid.NewGuid().ToString(),
+                Name = "Admin User", 
+                Email = "admin@example.com", 
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                UserType = LostAndFoundAPI.Models.UserType.Admin
+            }
         };
         context.Users.AddRange(users);
+        context.SaveChanges();
         
         var foundItems = new[]
         {
             new LostAndFoundAPI.Models.FoundItem 
             { 
-                Title = "Lost iPhone", 
+                Id = Guid.NewGuid().ToString(),
+                Name = "Lost iPhone", 
                 Description = "Black iPhone 13 found in library", 
-                Location = "Gorgas Library", 
+                Building = "Gorgas Library", 
+                Room = "Study Room 205",
                 DateFound = DateTime.Now.AddDays(-2),
-                ContactInfo = "555-0101",
+                AddedBy = users[0].Id,
                 IsVisible = true
             },
             new LostAndFoundAPI.Models.FoundItem 
             { 
-                Title = "Red Backpack", 
+                Id = Guid.NewGuid().ToString(),
+                Name = "Red Backpack", 
                 Description = "Red North Face backpack with laptop", 
-                Location = "Student Center", 
+                Building = "Student Center", 
+                Room = "Food Court",
                 DateFound = DateTime.Now.AddDays(-1),
-                ContactInfo = "555-0102",
+                AddedBy = users[1].Id,
                 IsVisible = true
             },
             new LostAndFoundAPI.Models.FoundItem 
             { 
-                Title = "Car Keys", 
+                Id = Guid.NewGuid().ToString(),
+                Name = "Car Keys", 
                 Description = "Toyota key fob with house keys", 
-                Location = "Parking Deck B", 
+                Building = "Parking Deck B", 
+                Room = "Level 2",
                 DateFound = DateTime.Now.AddHours(-6),
-                ContactInfo = "555-0103",
+                AddedBy = users[0].Id,
                 IsVisible = true
             }
         };

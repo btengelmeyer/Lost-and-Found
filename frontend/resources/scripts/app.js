@@ -9,7 +9,10 @@ class LostAndFoundApp {
         this.students = [];
         this.currentFilter = '';
         this.currentSearch = '';
-        this.apiBaseUrl = 'http://localhost:5141/api'; // API base URL
+        // Use Railway URL in production, localhost in development
+        this.apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:5141/api' 
+            : `${window.location.protocol}//${window.location.host}/api`;
         
         this.init();
     }
