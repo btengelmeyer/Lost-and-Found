@@ -1,5 +1,0 @@
-[build]
-builder = "NIXPACKS"
-
-[deploy]
-startCommand = "cd api/LostAndFoundAPI && dotnet run --urls=http://0.0.0.0:$PORT"
