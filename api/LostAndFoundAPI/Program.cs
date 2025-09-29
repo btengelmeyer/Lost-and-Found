@@ -35,9 +35,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 
-// Serve static files from frontend directory
+// Serve static files from wwwroot directory
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+// Add fallback to serve index.html for SPA routing
+app.MapFallbackToFile("index.html");
 
 app.UseAuthorization();
 app.MapControllers();

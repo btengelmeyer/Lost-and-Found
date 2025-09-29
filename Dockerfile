@@ -14,8 +14,9 @@ RUN dotnet restore "api/LostAndFoundAPI/LostAndFoundAPI.csproj"
 # Copy the rest of the source code
 COPY . .
 
-# Copy frontend files to wwwroot
-COPY frontend/ /src/wwwroot/
+# Copy frontend files to wwwroot for serving
+RUN mkdir -p /src/api/LostAndFoundAPI/wwwroot
+COPY frontend/ /src/api/LostAndFoundAPI/wwwroot/
 
 # Build the application
 WORKDIR "/src/api/LostAndFoundAPI"
